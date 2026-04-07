@@ -1,0 +1,84 @@
+# Frontend Changelog
+
+All notable changes to the MikunAir Frontend SPA are documented here.
+
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).  
+Versioning follows [Semantic Versioning](https://semver.org/).
+
+---
+
+## [Unreleased]
+
+---
+
+## [1.1.0] — 2026-06-27
+
+### Added
+
+- **`README.md`**: Full developer documentation — quick start, architecture overview, module map, auth pattern, testing guide, CI/CD pipeline docs, Docker usage, environment variables table, engineering decisions, security notes, accessibility notes
+- **Component & integration test suite** — 6 new test files, 53 new tests (total: 13 files, 92 tests, all passing):
+  - `SearchForm.test.tsx` — 9 component tests: renders all fields, accessible form label, valid submit fires `onSearch`, validation errors for same-origin/past-date/invalid-return, BUSINESS seat class selection, pre-population from `initialValues`
+  - `FlightCard.test.tsx` — 11 tests: flight number/route, GBP price formatting, IATA codes, duration, select callback, `aria-pressed` selected state, low-seat badge (≤5 seats), singular "seat" text, accessible article label, fare breakdown terms
+  - `LoginPage.test.tsx` — 6 tests: renders fields, email validation error, empty password error, successful login navigates, 401 server error message, register link present
+  - `RegisterPage.test.tsx` — 7 tests: renders all fields, invalid email error, short password error, consent required, successful registration navigates to home, 409 duplicate email message, generic server error, sign-in link
+  - `Modal.test.tsx` — 9 tests: hidden when `open=false`, shown when `open=true`, `aria-modal`/`aria-labelledby`, renders title and children, close button fires `onClose`, Escape key fires `onClose`, backdrop click fires `onClose`, close button focusable, no-op on non-Escape keys
+  - `BookingFlow.test.tsx` — 9 tests: step 1 initial state, step indicator `aria-current`, blocks step 2 with empty passengers, advances with valid passenger, back navigation, step 3 review, review shows passenger and flight, `createBooking` called with correct DTO, navigates to confirmation
+- **Playwright E2E test suite** — 5 journey files covering all QUALITY-001 critical user journeys:
+  - `tests/e2e/booking-oneway.spec.ts` (E2E-001): search → select → passenger details → seat class → review → confirm; IATA code format validation; same-origin rejection; empty passenger block
+  - `tests/e2e/booking-return.spec.ts` (E2E-002): return flight search → outbound + inbound selection → confirm; one-way search omits return section
+  - `tests/e2e/auth.spec.ts` (E2E-003): new user registration; consent required; 409 duplicate email; login with correct credentials; wrong password error; unauthenticated `/profile` redirect; `/admin` redirect for non-admin; sign-out flow
+  - `tests/e2e/profile.spec.ts` (E2E-004): profile page structure; booking appears in history after creation; status badges on booking list items; View link navigates to detail page; GDPR erasure section visible; erasure modal opens and dismisses
+  - `tests/e2e/cancel-booking.spec.ts` (E2E-005): cancel confirmed booking → status updates to CANCELLED; cancel modal dismissed without cancelling; already-cancelled booking has no cancel button
+  - `tests/e2e/helpers.ts`: shared test utilities — `login()`, `searchFlights()`, `fillPassengerForm()`, fixture constants
+- **`playwright.config.ts`**: Playwright configuration — Chromium only (CI), `baseURL` from `PLAYWRIGHT_BASE_URL`, retries on CI, HTML + list reporters
+- **`.github/workflows/frontend-ci.yml`**: Dedicated frontend CI pipeline (triggers on changes to `frontend/**`): TypeScript check → Lint → Unit + component tests with coverage → Upload coverage artifact → Security audit → Production build → Upload dist artifact → Docker image build (`--target serve`)
+- **`vitest.config.ts`** coverage include expanded to cover all 11 files with unit or component tests (was 5 files)
+
+---
+
+## [1.0.0] — 2026-06-27
+
+### Added
+
+- React 18 + TypeScript + Vite SPA (`"type": "module"`, Vite 6, Tailwind CSS v4 via `@tailwindcss/vite`)
+- Module structure: `search`, `booking`, `auth`, `profile`, `admin` — all module directories scaffolded per DESIGN-001
+- **`shared/api`**: Apollo Client connected to `VITE_API_URL/graphql`; Axios client with `withCredentials`, JWT `Authorization` request interceptor, and silent-refresh response interceptor (retry once on 401, redirect to `/auth/login` on second 401)
+- **`shared/ui`** design system: `Button` (variants: primary, secondary, danger, ghost; loading state with ARIA), `Input` (label, error, hint, `aria-describedby`), `Card`, `Modal` (focus trap, Escape key, `role="dialog"`), `Spinner` (`role="status"`), `Alert` (`role="alert"` / `role="status"` by variant), `Badge`
+- **`shared/hooks`**: `useFlightSearch` (Apollo query wrapping `searchFlights` GraphQL), `useBooking` (Axios `POST /bookings` with 409 handling)
+- **`shared/utils`**: `formatPrice(pence)` → `£X.XX`; `formatDuration(minutes)` → `Xh Ym`
+- **`auth` module**: `AuthContext` (login, register, logout, silent refresh on mount), `ProtectedRoute` (redirects to `/auth/login` with `returnTo`), `AdminRoute` (redirects to `/` for non-ADMIN), `LoginPage`, `RegisterPage` (Zod client-side validation, consent checkbox)
+- **`search` module**: `SearchForm` (Zod-validated: origin ≠ destination, date in future, return after departure), `FlightCard` (`<article>` with `aria-label`, fare breakdown `<dl>`, `aria-pressed` select button), `FlightResultsList` (loading skeleton, empty state), `HomePage` (hero + search form), `SearchResultsPage` (URL search params driven, outbound + optional inbound selection, "Continue to booking" CTA)
+- **`booking` module**: `BookingFlow` (3-step wizard with `useReducer`: Passengers → Seat Class → Review; step indicator with `aria-current="step"`; focus moved to step heading on transition), `PassengerForm` (per-passenger fieldset with Zod validation and `aria-describedby` error linking), `ConfirmationPage` (reference display, total price, links to profile and home)
+- **`profile` module**: `ProfilePage` (booking history via TanStack Query, GDPR erasure modal), `BookingDetailPage` (booking detail, passenger list, cancel booking modal)
+- **`admin` module**: `AdminPage` (flight schedule table with deactivate, add-flight modal form)
+- **`App.tsx`**: route-based code splitting (`React.lazy`), `ApolloProvider`, `QueryClientProvider`, `AuthProvider`, `BrowserRouter`; all 9 routes per DESIGN-001 §2
+- Vitest 4 unit test suite — 7 files, 39 tests, all passing; coverage ≥ 80% on all unit-tested modules:
+  - `formatPrice.test.ts` — 6 cases (zero, 1p, 100p, 12550p, 99999p, round values)
+  - `formatDuration.test.ts` — 4 cases
+  - `SearchForm.validation.test.ts` — 8 schema validation cases (same constraints as backend Zod schema)
+  - `PassengerForm.validation.test.tsx` — 6 schema + 3 component render cases
+  - `AuthContext.test.tsx` — 6 cases (throws outside provider, initial state, login, logout, register, refresh-failure, unauthenticated handler)
+  - `ProtectedRoute.test.tsx` — 2 cases (authenticated → renders, unauthenticated → redirects)
+  - `AdminRoute.test.tsx` — 3 cases (ADMIN → renders, null → redirects, USER → redirects)
+- Multi-stage Dockerfile: `builder` (Vite production build), `development` (Vite dev server HMR), `serve` (nginx)
+- nginx config: SPA fallback, 1-year cache for content-hashed assets, `no-cache` for `index.html`, security headers
+- `.env.example` with `VITE_API_URL`
+
+### Security
+
+- `vitest` + `@vitest/coverage-v8` pinned to `^4.1.9` — eliminates 2 critical esbuild CVEs (GHSA-67mh-4wv8-2f99) that were present at `^2.x`
+- Zero vulnerabilities in `npm audit --audit-level=high`
+- Access token stored in React context (memory only) — not in `localStorage` or `sessionStorage`
+- `dangerouslySetInnerHTML` never used (DDR-003 compliance)
+
+### Technical Decisions (see `docs/adr/` for full ADRs)
+
+- ADR-001: React SPA with Vite selected over Next.js (SEO not required)
+- ADR-002: Apollo Client (GraphQL) + Axios (REST) dual-client approach
+- ADR-003: Access token in memory only; refresh token in HTTP-only cookie
+- ADR-004: React Context (auth) + TanStack Query (server state) — no Redux
+- ADR-005: React Router v6 with layout routes
+
+---
+
+*This changelog covers frontend changes only. See the backend repository for backend release history.*
