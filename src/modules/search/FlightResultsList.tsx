@@ -37,17 +37,22 @@ export function FlightResultsList({
       )}
 
       {!isLoading && flights.length > 0 && (
-        <ul className="flex flex-col gap-3" role="list">
-          {flights.map((flight) => (
-            <li key={flight.id}>
-              <FlightCard
-                flight={flight}
-                selected={flight.id === selectedId}
-                onSelect={onSelect}
-              />
-            </li>
-          ))}
-        </ul>
+        <>
+          <p className="sr-only" aria-live="polite">
+            {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
+          </p>
+          <ul className="flex flex-col gap-3" role="list">
+            {flights.map((flight) => (
+              <li key={flight.id}>
+                <FlightCard
+                  flight={flight}
+                  selected={flight.id === selectedId}
+                  onSelect={onSelect}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );
