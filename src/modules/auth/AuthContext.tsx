@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     registerUnauthenticatedHandler(() => {
+      setAccessToken(null);
       setState({ user: null, accessToken: null });
     });
   }, []);
