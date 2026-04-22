@@ -33,7 +33,10 @@ export function ConfirmationPage() {
         </p>
 
         <Card className="mb-6">
-          <p className="text-3xl font-mono font-bold text-blue-700 tracking-widest">
+          <p
+            data-testid="booking-reference"
+            className="text-3xl font-mono font-bold text-blue-700 tracking-widest"
+          >
             {reference}
           </p>
           {totalPricePence !== undefined && (
