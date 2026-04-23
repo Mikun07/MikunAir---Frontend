@@ -66,7 +66,9 @@ export function BookingDetailPage() {
           <Link to="/profile" className="text-sm text-blue-700 underline hover:no-underline">
             ← Back to profile
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 mt-2">Booking detail</h1>
+          <h1 id="booking-detail-heading" className="text-2xl font-bold text-gray-900 mt-2">
+            Booking details
+          </h1>
         </div>
 
         {isLoading && (
@@ -161,7 +163,7 @@ export function BookingDetailPage() {
             loading={cancelMutation.isPending}
             onClick={() => cancelMutation.mutate()}
           >
-            Yes, cancel
+            Confirm cancel
           </Button>
         </div>
       </Modal>
