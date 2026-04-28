@@ -27,6 +27,10 @@ export function HomePage() {
         <Card>
           <SearchForm onSearch={handleSearch} />
         </Card>
+        <nav className="mt-6 flex justify-center gap-4 text-sm text-blue-200">
+          <a href="/auth/login" className="hover:text-white underline">Sign in</a>
+          <a href="/auth/register" className="hover:text-white underline">Create account</a>
+        </nav>
       </div>
     </main>
   );
