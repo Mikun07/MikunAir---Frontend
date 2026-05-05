@@ -28,6 +28,7 @@ export function Alert({ variant = 'info', title, children, onRetry }: AlertProps
       <p className="text-sm">{children}</p>
       {onRetry && (
         <button
+          type="button"
           onClick={onRetry}
           className="mt-2 text-sm underline hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-current rounded"
         >
