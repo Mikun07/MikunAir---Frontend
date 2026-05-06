@@ -18,6 +18,7 @@ export interface UserPublicDTO {
 interface AuthState {
   user: UserPublicDTO | null;
   accessToken: string | null;
+  isRefreshing: boolean;
 }
 
 interface AuthContextValue extends AuthState {
@@ -30,19 +31,20 @@ interface AuthContextValue extends AuthState {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({ user: null, accessToken: null });
+  const [state, setState] = useState<AuthState>({ user: null, accessToken: null, isRefreshing: true });
   const initialRefreshDone = useRef(false);
 
   const refresh = useCallback(async () => {
+    setState((prev) => ({ ...prev, isRefreshing: true }));
     try {
       const { data } = await axiosClient.post<{ accessToken: string; user: UserPublicDTO }>(
         '/auth/refresh',
       );
       setAccessToken(data.accessToken);
-      setState({ user: data.user, accessToken: data.accessToken });
+      setState({ user: data.user, accessToken: data.accessToken, isRefreshing: false });
     } catch {
       setAccessToken(null);
-      setState({ user: null, accessToken: null });
+      setState({ user: null, accessToken: null, isRefreshing: false });
     }
   }, []);
 
@@ -55,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     registerUnauthenticatedHandler(() => {
       setAccessToken(null);
-      setState({ user: null, accessToken: null });
+      setState({ user: null, accessToken: null, isRefreshing: false });
     });
   }, []);
 
@@ -65,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       { email, password },
     );
     setAccessToken(data.accessToken);
-    setState({ user: data.user, accessToken: data.accessToken });
+    setState({ user: data.user, accessToken: data.accessToken, isRefreshing: false });
   }, []);
 
   const register = useCallback(
@@ -75,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         { email, password, consentGiven },
       );
       setAccessToken(data.accessToken);
-      setState({ user: data.user, accessToken: data.accessToken });
+      setState({ user: data.user, accessToken: data.accessToken, isRefreshing: false });
     },
     [],
   );
@@ -85,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await axiosClient.post('/auth/logout');
     } finally {
       setAccessToken(null);
-      setState({ user: null, accessToken: null });
+      setState({ user: null, accessToken: null, isRefreshing: false });
     }
   }, []);
 

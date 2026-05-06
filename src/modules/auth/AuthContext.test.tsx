@@ -18,11 +18,12 @@ vi.mock('@shared/api', () => ({
 import { axiosClient, setAccessToken } from '@shared/api';
 
 function TestConsumer() {
-  const { user, accessToken, login, logout, register } = useAuth();
+  const { user, accessToken, isRefreshing, login, logout, register } = useAuth();
   return (
     <div>
       <p data-testid="email">{user?.email ?? 'none'}</p>
       <p data-testid="token">{accessToken ?? 'none'}</p>
+      <p data-testid="refreshing">{String(isRefreshing)}</p>
       <button onClick={() => void login('test@example.com', 'password123')}>Login</button>
       <button onClick={() => void logout()}>Logout</button>
       <button onClick={() => void register('new@example.com', 'password123', true)}>Register</button>

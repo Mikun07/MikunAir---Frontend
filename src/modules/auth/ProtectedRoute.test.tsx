@@ -25,6 +25,7 @@ describe('ProtectedRoute', () => {
     vi.mocked(useAuth).mockReturnValue({
       user: { id: 'u1', email: 'test@example.com', role: 'USER' },
       accessToken: 'tok',
+      isRefreshing: false,
       login: vi.fn(),
       register: vi.fn(),
       logout: vi.fn(),
@@ -39,6 +40,7 @@ describe('ProtectedRoute', () => {
     vi.mocked(useAuth).mockReturnValue({
       user: null,
       accessToken: null,
+      isRefreshing: false,
       login: vi.fn(),
       register: vi.fn(),
       logout: vi.fn(),
