@@ -3,7 +3,7 @@ interface SpinnerProps {
   label?: string;
 }
 
-export function Spinner({ size = 'md', label = 'Loading...' }: SpinnerProps) {
+export function Spinner({ size = 'md', label = 'Loading…' }: SpinnerProps) {
   const sizes: Record<string, string> = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
