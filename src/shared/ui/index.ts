@@ -7,3 +7,4 @@ export { Modal } from './Modal';
 export { Spinner } from './Spinner';
 export { Alert } from './Alert';
 export { Badge } from './Badge';
+export { Tooltip } from './Tooltip';
