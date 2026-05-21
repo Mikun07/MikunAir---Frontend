@@ -8,3 +8,4 @@ export { Spinner } from './Spinner';
 export { Alert } from './Alert';
 export { Badge } from './Badge';
 export { Tooltip } from './Tooltip';
+export { ErrorBoundary } from './ErrorBoundary';
