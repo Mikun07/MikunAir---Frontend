@@ -3,3 +3,4 @@ export type { FlightOption, FlightSearchParams, FlightSearchResult, Airport, Far
 export { useBooking } from './useBooking';
 export type { PassengerDTO, CreateBookingDTO, BookingConfirmationResponse } from './useBooking';
 export { useDebounce } from './useDebounce';
+export { useLocalStorage } from './useLocalStorage';
