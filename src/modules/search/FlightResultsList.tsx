@@ -1,6 +1,9 @@
 import { FlightOption } from '@shared/hooks';
-import { Spinner } from '@shared/ui';
+import { usePagination } from '@shared/hooks';
+import { Spinner, Pagination } from '@shared/ui';
 import { FlightCard } from './FlightCard';
+
+const PAGE_SIZE = 5;
 
 interface FlightResultsListProps {
   title: string;
@@ -17,12 +20,12 @@ export function FlightResultsList({
   selectedId,
   onSelect,
 }: FlightResultsListProps) {
+  const headingId = `${title.toLowerCase().replace(/\s+/g, '-')}-heading`;
+  const { currentPage, totalPages, pageItems, goToPage } = usePagination(flights, PAGE_SIZE);
+
   return (
-    <section aria-labelledby={`${title.toLowerCase().replace(/\s+/g, '-')}-heading`}>
-      <h2
-        id={`${title.toLowerCase().replace(/\s+/g, '-')}-heading`}
-        className="text-lg font-semibold text-gray-800 mb-3"
-      >
+    <section aria-labelledby={headingId}>
+      <h2 id={headingId} className="text-lg font-semibold text-gray-800 mb-3">
         {title}
       </h2>
 
@@ -42,7 +45,7 @@ export function FlightResultsList({
             {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
           </p>
           <ul className="flex flex-col gap-3" role="list">
-            {flights.map((flight) => (
+            {pageItems.map((flight) => (
               <li key={flight.id}>
                 <FlightCard
                   flight={flight}
@@ -52,6 +55,13 @@ export function FlightResultsList({
               </li>
             ))}
           </ul>
+          <div className="mt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          </div>
         </>
       )}
     </section>
