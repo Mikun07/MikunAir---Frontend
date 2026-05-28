@@ -1,16 +1,11 @@
 import { FlightOption } from '@shared/hooks';
-import { formatPrice } from '@shared/utils';
-import { formatDuration } from '@shared/utils';
+import { formatPrice, formatDuration, formatDate, formatTime } from '@shared/utils';
 import { Button, Badge } from '@shared/ui';
 
 interface FlightCardProps {
   flight: FlightOption;
   selected?: boolean;
   onSelect: (flight: FlightOption) => void;
-}
-
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
 
 export function FlightCard({ flight, selected = false, onSelect }: FlightCardProps) {
@@ -48,6 +43,7 @@ export function FlightCard({ flight, selected = false, onSelect }: FlightCardPro
         <p className="text-sm text-gray-500 mt-1">
           {origin.city} → {destination.city}
         </p>
+        <p className="text-xs text-gray-400 mt-0.5">{formatDate(departureAt)}</p>
       </div>
 
       <div className="flex flex-col items-end gap-2">
