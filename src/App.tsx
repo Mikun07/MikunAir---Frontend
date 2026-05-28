@@ -6,7 +6,7 @@ import { apolloClient } from '@shared/api';
 import { AuthProvider } from '@modules/auth/AuthContext';
 import { ProtectedRoute } from '@modules/auth/ProtectedRoute';
 import { AdminRoute } from '@modules/auth/AdminRoute';
-import { Spinner } from '@shared/ui';
+import { Spinner, NotFoundPage } from '@shared/ui';
 
 const HomePage = lazy(() => import('@modules/search').then((m) => ({ default: m.HomePage })));
 const SearchResultsPage = lazy(() =>
@@ -89,6 +89,7 @@ export function App() {
                     </AdminRoute>
                   }
                 />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </AuthProvider>
