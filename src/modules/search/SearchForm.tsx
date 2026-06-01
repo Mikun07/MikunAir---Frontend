@@ -132,10 +132,14 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
           <label htmlFor="passengers" className="text-sm font-medium text-gray-700">
             Passengers
           </label>
+          <p id="passengers-hint" className="text-xs text-gray-500">
+            Maximum 9 passengers per booking
+          </p>
           <select
             id="passengers"
             value={passengers}
             onChange={(e) => setPassengers(Number(e.target.value))}
+            aria-describedby="passengers-hint"
             className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
           >
             {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
