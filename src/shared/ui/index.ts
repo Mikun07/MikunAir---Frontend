@@ -11,3 +11,4 @@ export { Tooltip } from './Tooltip';
 export { ErrorBoundary } from './ErrorBoundary';
 export { Pagination } from './Pagination';
 export { NotFoundPage } from './NotFoundPage';
+export { LoadingPage } from './LoadingPage';
