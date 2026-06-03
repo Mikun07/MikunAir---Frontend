@@ -6,7 +6,7 @@ import { apolloClient } from '@shared/api';
 import { AuthProvider } from '@modules/auth/AuthContext';
 import { ProtectedRoute } from '@modules/auth/ProtectedRoute';
 import { AdminRoute } from '@modules/auth/AdminRoute';
-import { Spinner, NotFoundPage } from '@shared/ui';
+import { Spinner, NotFoundPage, SkipLink, ErrorBoundary } from '@shared/ui';
 
 const HomePage = lazy(() => import('@modules/search').then((m) => ({ default: m.HomePage })));
 const SearchResultsPage = lazy(() =>
@@ -57,7 +57,10 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <AuthProvider>
+            <SkipLink />
+            <ErrorBoundary>
             <Suspense fallback={<PageFallback />}>
+              <main id="main-content">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/search" element={<SearchResultsPage />} />
@@ -89,9 +92,11 @@ export function App() {
                     </AdminRoute>
                   }
                 />
-                <Route path="*" element={<NotFoundPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
               </Routes>
+              </main>
             </Suspense>
+            </ErrorBoundary>
           </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>
