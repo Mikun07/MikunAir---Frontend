@@ -21,6 +21,7 @@ export default defineConfig({
       include: [
         'src/shared/utils/**/*.ts',
         'src/shared/ui/Modal.tsx',
+        'src/shared/ui/ErrorBoundary.tsx',
         'src/modules/auth/AuthContext.tsx',
         'src/modules/auth/ProtectedRoute.tsx',
         'src/modules/auth/AdminRoute.tsx',
