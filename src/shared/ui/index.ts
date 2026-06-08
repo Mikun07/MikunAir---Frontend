@@ -13,3 +13,5 @@ export { Pagination } from './Pagination';
 export { NotFoundPage } from './NotFoundPage';
 export { LoadingPage } from './LoadingPage';
 export { SkipLink } from './SkipLink';
+export { Breadcrumbs } from './Breadcrumbs';
+export type { BreadcrumbItem } from './Breadcrumbs';
