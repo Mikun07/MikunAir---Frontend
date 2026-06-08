@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosClient } from '@shared/api';
-import { Alert, Badge, Button, Card, Modal, Spinner } from '@shared/ui';
+import { Alert, Badge, Breadcrumbs, Button, Card, Modal, Spinner } from '@shared/ui';
 import { formatPrice } from '@shared/utils';
 
 interface Passenger {
@@ -63,9 +63,13 @@ export function BookingDetailPage() {
     <main className="min-h-screen bg-gray-50 px-4 py-8">
       <div className="max-w-2xl mx-auto flex flex-col gap-6">
         <div>
-          <Link to="/profile" className="text-sm text-blue-700 underline hover:no-underline">
-            ← Back to profile
-          </Link>
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Profile', href: '/profile' },
+              { label: 'Booking details' },
+            ]}
+          />
           <h1 id="booking-detail-heading" className="text-2xl font-bold text-gray-900 mt-2">
             Booking details
           </h1>
