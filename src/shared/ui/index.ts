@@ -15,3 +15,4 @@ export { LoadingPage } from './LoadingPage';
 export { SkipLink } from './SkipLink';
 export { Breadcrumbs } from './Breadcrumbs';
 export type { BreadcrumbItem } from './Breadcrumbs';
+export { Divider } from './Divider';
