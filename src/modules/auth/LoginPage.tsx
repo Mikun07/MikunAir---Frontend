@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuth } from './AuthContext';
 import { Button, Input, Card, Alert } from '@shared/ui';
+import { useWindowTitle } from '@shared/hooks';
 
 const schema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -10,6 +11,7 @@ const schema = z.object({
 });
 
 export function LoginPage() {
+  useWindowTitle('Sign In');
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
