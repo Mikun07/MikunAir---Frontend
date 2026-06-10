@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card } from '@shared/ui';
+import { useWindowTitle } from '@shared/hooks';
 import { SearchForm, SearchFormValues } from './SearchForm';
 
 export function HomePage() {
+  useWindowTitle('Search Flights');
   const navigate = useNavigate();
 
   function handleSearch(values: SearchFormValues) {
@@ -28,8 +30,8 @@ export function HomePage() {
           <SearchForm onSearch={handleSearch} />
         </Card>
         <nav className="mt-6 flex justify-center gap-4 text-sm text-blue-200">
-          <a href="/auth/login" className="hover:text-white underline">Sign in</a>
-          <a href="/auth/register" className="hover:text-white underline">Create account</a>
+          <Link to="/auth/login" className="hover:text-white underline">Sign in</Link>
+          <Link to="/auth/register" className="hover:text-white underline">Create account</Link>
         </nav>
       </div>
     </main>
