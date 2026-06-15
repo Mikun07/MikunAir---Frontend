@@ -25,4 +25,9 @@ describe('formatPrice', () => {
   it('always produces two decimal places', () => {
     expect(formatPrice(1000)).toBe('£10.00');
   });
+
+  it('accepts a different currency code', () => {
+    const result = formatPrice(10000, 'EUR', 'de-DE');
+    expect(result).toContain('100');
+  });
 });
