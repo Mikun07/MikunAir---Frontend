@@ -17,3 +17,4 @@ export { Breadcrumbs } from './Breadcrumbs';
 export type { BreadcrumbItem } from './Breadcrumbs';
 export { Divider } from './Divider';
 export { Tag } from './Tag';
+export { ProgressBar } from './ProgressBar';
