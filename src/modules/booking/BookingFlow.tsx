@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useBooking, PassengerDTO } from '@shared/hooks';
-import { Alert, Button, Card } from '@shared/ui';
+import { Alert, Button, Card, ProgressBar } from '@shared/ui';
 import { formatPrice } from '@shared/utils';
 import { PassengerForm, passengerSchema, PassengerErrors } from './PassengerForm';
 
@@ -138,6 +138,13 @@ export function BookingFlow() {
             })}
           </ol>
         </nav>
+
+        <ProgressBar
+          value={state.step}
+          max={3}
+          label={`Step ${state.step} of 3`}
+          showLabel
+        />
 
         <Card>
           {/* Step 1 — Passengers */}
