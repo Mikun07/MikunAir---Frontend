@@ -8,3 +8,4 @@ export { usePagination } from './usePagination';
 export type { UsePaginationResult } from './usePagination';
 export { useMediaQuery } from './useMediaQuery';
 export { useWindowTitle } from './useWindowTitle';
+export { useClickOutside } from './useClickOutside';
