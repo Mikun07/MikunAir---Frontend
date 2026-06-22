@@ -1,6 +1,6 @@
 import { FlightOption } from '@shared/hooks';
 import { usePagination } from '@shared/hooks';
-import { Spinner, Pagination } from '@shared/ui';
+import { Spinner, Pagination, EmptyState } from '@shared/ui';
 import { FlightCard } from './FlightCard';
 
 const PAGE_SIZE = 5;
@@ -36,7 +36,10 @@ export function FlightResultsList({
       )}
 
       {!isLoading && flights.length === 0 && (
-        <p className="text-gray-500 py-4">No flights found for this route and date.</p>
+        <EmptyState
+          title="No flights found"
+          description="Try adjusting your dates, origin or destination."
+        />
       )}
 
       {!isLoading && flights.length > 0 && (
