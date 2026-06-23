@@ -9,3 +9,4 @@ export type { UsePaginationResult } from './usePagination';
 export { useMediaQuery } from './useMediaQuery';
 export { useWindowTitle } from './useWindowTitle';
 export { useClickOutside } from './useClickOutside';
+export { useToggle } from './useToggle';
