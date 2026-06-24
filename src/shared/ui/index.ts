@@ -20,3 +20,4 @@ export { Tag } from './Tag';
 export { ProgressBar } from './ProgressBar';
 export { EmptyState } from './EmptyState';
 export { Drawer } from './Drawer';
+export { Banner } from './Banner';
