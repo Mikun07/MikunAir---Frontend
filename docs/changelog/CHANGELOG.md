@@ -11,6 +11,55 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.2.0] — 2026-06-27
+
+### Added
+
+- **`formatDate` / `formatTime` / `formatDateShort` utilities** (`src/shared/utils/formatDate.ts`) — locale-aware date/time formatting via `Intl.DateTimeFormat`, with tests
+- **`Select` component** (`src/shared/ui/Select.tsx`) — accessible select with label, error, hint and `aria-invalid` support; exported from shared UI index
+- **`useDebounce` hook** (`src/shared/hooks/useDebounce.ts`) — generic debounce hook for delaying state updates
+- **`Tooltip` component** (`src/shared/ui/Tooltip.tsx`) — hover/focus tooltip with `role="tooltip"` and four position variants
+- **`ErrorBoundary` component** (`src/shared/ui/ErrorBoundary.tsx`) — class-based error boundary with default fallback UI, custom fallback prop and reset button; tests added
+- **`useLocalStorage` hook** (`src/shared/hooks/useLocalStorage.ts`) — JSON-serialised localStorage with safe read/write fallbacks
+- **`Pagination` component** (`src/shared/ui/Pagination.tsx`) — accessible page navigation with `aria-current` and disabled states
+- **`usePagination` hook** (`src/shared/hooks/usePagination.ts`) — data-slicing hook paired with Pagination component; integrated into `FlightResultsList`
+- **`NotFoundPage` component** (`src/shared/ui/NotFoundPage.tsx`) — 404 page with "Back to home" link; registered as `path="*"` catch-all in `App.tsx`
+- **`LoadingPage` component** (`src/shared/ui/LoadingPage.tsx`) — full-screen loading state with Spinner
+- **`SkipLink` component** (`src/shared/ui/SkipLink.tsx`) — WCAG 2.4.1 skip navigation link, visible on focus; wired into `App.tsx`
+- **`ErrorBoundary` in `App.tsx`** — top-level error boundary; `<main id="main-content">` landmark for SkipLink target
+- **`useMediaQuery` hook** (`src/shared/hooks/useMediaQuery.ts`) — responsive breakpoint detection via `window.matchMedia`
+- **`useWindowTitle` hook** (`src/shared/hooks/useWindowTitle.ts`) — sets `document.title` to `"{page} — MikunAir"` on mount; applied to `HomePage`, `LoginPage`, `RegisterPage`
+- **`Breadcrumbs` component** (`src/shared/ui/Breadcrumbs.tsx`) — accessible `<nav aria-label="Breadcrumb">` with `aria-current="page"` on last item; wired into `BookingDetailPage`
+- **`Divider` component** (`src/shared/ui/Divider.tsx`) — horizontal, vertical and labelled divider variants
+- **`Tag` component** (`src/shared/ui/Tag.tsx`) — pill tag with optional remove button and colour variants
+- **`ProgressBar` component** (`src/shared/ui/ProgressBar.tsx`) — ARIA `progressbar` role with size/variant options; integrated into `BookingFlow` wizard
+- **`useClickOutside` hook** (`src/shared/hooks/useClickOutside.ts`) — `pointerdown` outside-click detector for dropdown/drawer dismissal
+- **`cn()` utility** (`src/shared/utils/classNames.ts`) — lightweight class name composer; tests added
+- **`EmptyState` component** (`src/shared/ui/EmptyState.tsx`) — zero-results view with title, description, icon and action slot; used in `FlightResultsList`
+- **`Drawer` component** (`src/shared/ui/Drawer.tsx`) — side panel with backdrop, Escape-key dismiss and `aria-modal`
+- **`useToggle` hook** (`src/shared/hooks/useToggle.ts`) — boolean toggle returning `[value, toggle, setValue]`
+- **`Banner` component** (`src/shared/ui/Banner.tsx`) — dismissible banner with `info`, `success`, `warning` and `promo` variants
+
+### Changed
+
+- **`formatPrice`** upgraded from template string to `Intl.NumberFormat` for locale-aware GBP formatting; accepts optional `currency` and `locale` parameters
+- **`FlightCard`** now imports `formatDate` / `formatTime` from `@shared/utils` instead of a local inline function; displays formatted departure date below route
+- **`FlightResultsList`** integrates `usePagination` + `Pagination` (5 results per page) and uses `EmptyState` for zero results
+- **`HomePage`** nav links changed from `<a>` to React Router `<Link>`; `useWindowTitle` applied
+- **`BookingDetailPage`** back-link replaced with `Breadcrumbs` component
+- **`BookingFlow`** step progress now displayed via `ProgressBar` above the wizard card
+- **`SearchForm`** passengers select has `aria-describedby` hint (WCAG 2.1)
+
+### Tests
+
+- 105 tests across 16 test files (was 92 / 13) — all passing
+- `ErrorBoundary.test.tsx` added (4 tests): no-error render, default fallback, custom fallback, Try-again button presence
+- `classNames.test.ts` added (4 tests): joining truthy classes, filtering falsy values, empty string for all-falsy, single class
+- `formatDate.test.ts` added (5 tests): date formatting, time format pattern, short date format
+- `formatPrice.test.ts` updated: added multi-currency test
+
+---
+
 ## [1.1.0] — 2026-06-27
 
 ### Added
