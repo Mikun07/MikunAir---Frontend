@@ -9,13 +9,17 @@ function paramsFromSearch(sp: URLSearchParams): FlightSearchParams | null {
   const origin = sp.get('origin');
   const destination = sp.get('destination');
   const departureDate = sp.get('departureDate');
-  const passengers = Number(sp.get('passengers') ?? '1');
   if (!origin || !destination || !departureDate) return null;
+
+  const adults = Number(sp.get('adults') ?? '1');
+  const children = Number(sp.get('children') ?? '0');
+  const totalPassengers = Math.max(1, adults + children);
+
   return {
     origin,
     destination,
     departureDate,
-    passengers,
+    passengers: totalPassengers,
     returnDate: sp.get('returnDate') ?? undefined,
     seatClass: (sp.get('seatClass') as 'ECONOMY' | 'BUSINESS' | null) ?? 'ECONOMY',
   };
@@ -38,8 +42,10 @@ export function SearchResultsPage() {
       origin: values.origin,
       destination: values.destination,
       departureDate: values.departureDate,
-      passengers: String(values.passengers),
+      adults: String(values.adults),
+      children: String(values.children),
       seatClass: values.seatClass,
+      tripType: values.tripType,
     };
     if (values.returnDate) params.returnDate = values.returnDate;
     setSearchParams(params);
@@ -49,11 +55,12 @@ export function SearchResultsPage() {
 
   function handleContinue() {
     if (!selectedOutbound) return;
-    const passengers = searchParams.get('passengers') ?? '1';
+    const adults = searchParams.get('adults') ?? '1';
+    const children = searchParams.get('children') ?? '0';
     const seatClass = searchParams.get('seatClass') ?? 'ECONOMY';
     const params = new URLSearchParams({
       outboundFlightId: selectedOutbound.id,
-      passengers,
+      passengers: String(Math.max(1, Number(adults) + Number(children))),
       seatClass,
     });
     if (selectedInbound) params.set('inboundFlightId', selectedInbound.id);
@@ -62,21 +69,22 @@ export function SearchResultsPage() {
 
   const canContinue = selectedOutbound !== null && (!isReturnTrip || selectedInbound !== null);
 
+  const initialValues: Partial<SearchFormValues> = {
+    origin: searchParams.get('origin') ?? '',
+    destination: searchParams.get('destination') ?? '',
+    departureDate: searchParams.get('departureDate') ?? '',
+    returnDate: searchParams.get('returnDate') ?? '',
+    adults: Number(searchParams.get('adults') ?? '1'),
+    children: Number(searchParams.get('children') ?? '0'),
+    seatClass: (searchParams.get('seatClass') as 'ECONOMY' | 'BUSINESS') ?? 'ECONOMY',
+    tripType: (searchParams.get('tripType') as 'one-way' | 'round-trip') ?? 'one-way',
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8">
+    <main className="min-h-screen bg-surface px-4 py-8">
       <div className="max-w-3xl mx-auto flex flex-col gap-6">
         <Card>
-          <SearchForm
-            onSearch={handleSearch}
-            initialValues={{
-              origin: searchParams.get('origin') ?? '',
-              destination: searchParams.get('destination') ?? '',
-              departureDate: searchParams.get('departureDate') ?? '',
-              returnDate: searchParams.get('returnDate') ?? '',
-              passengers: Number(searchParams.get('passengers') ?? '1'),
-              seatClass: (searchParams.get('seatClass') as 'ECONOMY' | 'BUSINESS') ?? 'ECONOMY',
-            }}
-          />
+          <SearchForm onSearch={handleSearch} initialValues={initialValues} />
         </Card>
 
         {error && (
@@ -86,7 +94,7 @@ export function SearchResultsPage() {
         )}
 
         {!error && !isLoading && (data?.outbound?.length ?? 0) > 0 && (
-          <h2 className="text-xl font-bold text-gray-900">Available flights</h2>
+          <h2 className="text-xl font-bold text-ink">Available flights</h2>
         )}
 
         {!error && (
