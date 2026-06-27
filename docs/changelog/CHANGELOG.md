@@ -11,6 +11,31 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.0] — 2026-07-07
+
+### Added
+
+- **`airports.ts`** (`src/modules/search/airports.ts`) — static dataset of 37 airports with IATA code, city, country and name; `searchAirports(query)` filter function returning up to 6 matches by code, city, name or country
+- **`AirportCombobox` component** (`src/modules/search/AirportCombobox.tsx`) — WCAG 1.1 / ARIA combobox (role="combobox", aria-autocomplete="list", aria-activedescendant) with keyboard navigation (Arrow keys, Enter, Escape), debounced query via `useDebounce`, outside-click dismiss via `useClickOutside`; renders IATA code + city + airport name in dropdown suggestions
+- **`PassengerPicker` component** (`src/modules/search/PassengerPicker.tsx`) — adult/child counter panel (role="dialog") with +/− buttons; enforces child-requires-adult rule (children capped to adult count when adults decrease; children increment blocked when adults = 0); max 9 total passengers; `aria-live` live region on counts; warning message when children reduced automatically
+- **`DiscountBanner` component** (`src/modules/search/DiscountBanner.tsx`) — promotional deal cards grid (4 deals: NORDIC15, SUMMER25, BIZMILE, EARLYBIRD) with discount %, promo code badge and expiry; aria-label="Current deals and discount codes"
+- **`ReviewCarousel` component** (`src/modules/search/ReviewCarousel.tsx`) — auto-advancing passenger review carousel (5s interval, pauses on hover); 5 reviews with star ratings, route badge, avatar initials; keyboard prev/next controls; aria-live="polite" for screen reader announcements; aria-roledescription="carousel"
+
+### Changed
+
+- **`SearchForm`** — fully redesigned: replaced raw IATA `<Input>` with `AirportCombobox`; replaced single passengers `<select>` with `PassengerPicker`; added one-way/round-trip toggle (return date field shown/hidden conditionally); `passengers` field replaced with `adults` + `children`; `tripType` field added to `SearchFormValues`; seat class radios restyled as pill-style toggle buttons
+- **`HomePage`** — complete landing page redesign: dark navy/midnight gradient background (`#0f172a → #1e3a5f`); sticky navigation header with blur backdrop; `MikunAirLogo` component with plane icon; `StatBar` (120+ destinations, 2M+ passengers, 4.9 rating, 24/7 support); decorative SVG globe with animated flight path arc; `PopularRoutes` quick-select buttons (4 routes pre-fill search form); `DiscountBanner` and `ReviewCarousel` below the fold; footer with copyright; search form in glassmorphism card (bg-white/5, backdrop-blur-xl)
+- **`SearchResultsPage`** — updated URL param parsing to read `adults` + `children` (derives `totalPassengers = adults + children` for API); passes `tripType` in params; updates `initialValues` to populate new `SearchFormValues` shape
+- **`index.css`** — replaced single focus-visible rule with full `@theme` block defining MikunAir brand tokens: `--color-sky` (#0ea5e9), `--color-midnight` (#0f172a), `--color-navy` (#1e3a5f), `--color-ink` (#1e293b), `--color-slate` (#64748b), `--color-mist` (#e2e8f0), `--color-surface` (#f8fafc), `--color-promo` (#f59e0b); added `scroll-behavior: smooth`
+
+### Tests
+
+- 111 tests across 16 test files — all passing (was 105 / 16)
+- `SearchForm.test.tsx` rewritten (14 tests): uses `role="combobox"` selectors for airport inputs, `aria-label` selector for passenger picker button, `initialValues`-based validation tests for same-origin and past-date cases, new tests for trip type toggle, passenger picker interaction, and adults/children count
+- `SearchForm.validation.test.ts` rewritten (10 tests): schema updated to match `adults`/`children`/`tripType` fields, round-trip return date validation, adults-0 rejection
+
+---
+
 ## [1.2.0] — 2026-06-27
 
 ### Added
