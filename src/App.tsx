@@ -30,6 +30,9 @@ const ProfilePage = lazy(() =>
 const BookingDetailPage = lazy(() =>
   import('@modules/profile').then((m) => ({ default: m.BookingDetailPage })),
 );
+const FlightHistoryPage = lazy(() =>
+  import('@modules/profile').then((m) => ({ default: m.FlightHistoryPage })),
+);
 const AdminPage = lazy(() =>
   import('@modules/admin').then((m) => ({ default: m.AdminPage })),
 );
@@ -81,6 +84,14 @@ export function App() {
                   element={
                     <ProtectedRoute>
                       <BookingDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile/history"
+                  element={
+                    <ProtectedRoute>
+                      <FlightHistoryPage />
                     </ProtectedRoute>
                   }
                 />

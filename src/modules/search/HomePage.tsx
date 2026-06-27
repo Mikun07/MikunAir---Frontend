@@ -1,9 +1,11 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useWindowTitle } from '@shared/hooks';
+import { useAuth } from '@modules/auth/AuthContext';
 import type { SearchFormValues } from './SearchForm';
 import { SearchForm } from './SearchForm';
 import { DiscountBanner } from './DiscountBanner';
 import { ReviewCarousel } from './ReviewCarousel';
+import { Alert } from '@shared/ui';
 
 function MikunAirLogo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const textSize = size === 'lg' ? 'text-3xl' : size === 'md' ? 'text-2xl' : 'text-xl';
@@ -87,6 +89,9 @@ function PopularRoutes({ onRouteClick }: { onRouteClick: (from: string, to: stri
 export function HomePage() {
   useWindowTitle('Search Flights');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout, isRefreshing } = useAuth();
+  const justRegistered = (location.state as { registered?: boolean } | null)?.registered === true;
 
   function handleSearch(values: SearchFormValues) {
     const params = new URLSearchParams({
@@ -113,23 +118,52 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <MikunAirLogo size="sm" />
           <nav className="flex items-center gap-1" aria-label="Main navigation">
-            <Link
-              to="/auth/login"
-              className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
-            >
-              Sign in
-            </Link>
-            <Link
-              to="/auth/register"
-              className="px-4 py-2 text-sm font-medium text-midnight bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
-            >
-              Create account
-            </Link>
+            {!isRefreshing && user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                >
+                  My bookings
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => { void logout().then(() => navigate('/auth/login')); }}
+                  className="px-4 py-2 text-sm font-medium text-midnight bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/auth/register"
+                  className="px-4 py-2 text-sm font-medium text-midnight bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                >
+                  Create account
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
 
       <main id="main-content">
+        {/* Post-registration welcome banner */}
+        {justRegistered && (
+          <div className="max-w-7xl mx-auto px-4 pt-6">
+            <Alert variant="success">
+              Account created — you&apos;re signed in and ready to book.
+            </Alert>
+          </div>
+        )}
+
         {/* Hero section */}
         <section
           aria-label="Flight search"
@@ -217,8 +251,14 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-xs">
           <span>© 2026 MikunAir. Portfolio project by Festus-Olaleye Ayomikun.</span>
           <div className="flex gap-4">
-            <Link to="/auth/login" className="hover:text-white/60 transition-colors">Sign in</Link>
-            <Link to="/auth/register" className="hover:text-white/60 transition-colors">Register</Link>
+            {user ? (
+              <Link to="/profile" className="hover:text-white/60 transition-colors">My bookings</Link>
+            ) : (
+              <>
+                <Link to="/auth/login" className="hover:text-white/60 transition-colors">Sign in</Link>
+                <Link to="/auth/register" className="hover:text-white/60 transition-colors">Register</Link>
+              </>
+            )}
           </div>
         </div>
       </footer>

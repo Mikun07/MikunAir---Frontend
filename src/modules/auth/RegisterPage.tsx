@@ -64,7 +64,7 @@ export function RegisterPage() {
     setLoading(true);
     try {
       await register(email, password, true);
-      navigate('/', { replace: true });
+      navigate('/', { replace: true, state: { registered: true } });
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       setServerError(
