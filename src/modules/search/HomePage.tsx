@@ -1,6 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useWindowTitle } from '@shared/hooks';
-import { SearchForm, SearchFormValues } from './SearchForm';
+import type { SearchFormValues } from './SearchForm';
+import { SearchForm } from './SearchForm';
 import { DiscountBanner } from './DiscountBanner';
 import { ReviewCarousel } from './ReviewCarousel';
 

@@ -1,9 +1,11 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useBooking, PassengerDTO } from '@shared/hooks';
+import type { PassengerDTO } from '@shared/hooks';
+import { useBooking } from '@shared/hooks';
 import { Alert, Button, Card, ProgressBar } from '@shared/ui';
 import { formatPrice } from '@shared/utils';
-import { PassengerForm, passengerSchema, PassengerErrors } from './PassengerForm';
+import type { PassengerErrors } from './PassengerForm';
+import { PassengerForm, passengerSchema } from './PassengerForm';
 
 type SeatClass = 'ECONOMY' | 'BUSINESS';
 

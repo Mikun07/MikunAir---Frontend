@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Input } from '@shared/ui';
-import { PassengerDTO } from '@shared/hooks';
+import type { PassengerDTO } from '@shared/hooks';
 
 export const passengerSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters').max(100),

@@ -1,8 +1,10 @@
-import { FormEvent, useState } from 'react';
+import type { FormEvent} from 'react';
+import { useState } from 'react';
 import { z } from 'zod';
 import { Button, Alert } from '@shared/ui';
 import { AirportCombobox } from './AirportCombobox';
-import { PassengerPicker, PassengerCounts } from './PassengerPicker';
+import type { PassengerCounts } from './PassengerPicker';
+import { PassengerPicker } from './PassengerPicker';
 
 export interface SearchFormValues {
   origin: string;

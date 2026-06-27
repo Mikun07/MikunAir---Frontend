@@ -1,4 +1,4 @@
-import { FlightOption } from '@shared/hooks';
+import type { FlightOption } from '@shared/hooks';
 import { formatPrice, formatDuration, formatDate, formatTime } from '@shared/utils';
 import { Button, Badge } from '@shared/ui';
 
@@ -8,7 +8,7 @@ interface FlightCardProps {
   onSelect: (flight: FlightOption) => void;
 }
 
-export function FlightCard({ flight, selected = false, onSelect }: FlightCardProps) {
+export function FlightCard({ flight, selected = false, onSelect }: Readonly<FlightCardProps>) {
   const { flightNumber, origin, destination, departureAt, arrivalAt, durationMinutes, farePerPassenger, availableSeats } = flight;
 
   return (
@@ -22,7 +22,7 @@ export function FlightCard({ flight, selected = false, onSelect }: FlightCardPro
         <div className="flex items-center gap-2 mb-1">
           <span className="font-semibold text-gray-900">{flightNumber}</span>
           {availableSeats <= 5 && (
-            <Badge variant="warning">{`${availableSeats} seat${availableSeats !== 1 ? 's' : ''} left`}</Badge>
+            <Badge variant="warning">{`${availableSeats} seat${availableSeats === 1 ? '' : 's'} left`}</Badge>
           )}
         </div>
         <div className="flex items-center gap-3 text-gray-700">

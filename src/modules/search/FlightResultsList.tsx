@@ -1,4 +1,4 @@
-import { FlightOption } from '@shared/hooks';
+import type { FlightOption } from '@shared/hooks';
 import { usePagination } from '@shared/hooks';
 import { Spinner, Pagination, EmptyState } from '@shared/ui';
 import { FlightCard } from './FlightCard';

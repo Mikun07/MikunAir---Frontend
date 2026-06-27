@@ -1,9 +1,11 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
-import { useFlightSearch, FlightOption, FlightSearchParams } from '@shared/hooks';
+import type { FlightOption, FlightSearchParams } from '@shared/hooks';
+import { useFlightSearch } from '@shared/hooks';
 import { Alert, Button, Card } from '@shared/ui';
 import { FlightResultsList } from './FlightResultsList';
-import { SearchForm, SearchFormValues } from './SearchForm';
+import type { SearchFormValues } from './SearchForm';
+import { SearchForm } from './SearchForm';
 
 function paramsFromSearch(sp: URLSearchParams): FlightSearchParams | null {
   const origin = sp.get('origin');

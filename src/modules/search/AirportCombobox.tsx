@@ -1,6 +1,8 @@
-import { useRef, useState, useId, KeyboardEvent } from 'react';
+import type { KeyboardEvent } from 'react';
+import { useRef, useState, useId } from 'react';
 import { useDebounce, useClickOutside } from '@shared/hooks';
-import { searchAirports, AirportOption } from './airports';
+import type { AirportOption } from './airports';
+import { searchAirports } from './airports';
 
 interface AirportComboboxProps {
   label: string;

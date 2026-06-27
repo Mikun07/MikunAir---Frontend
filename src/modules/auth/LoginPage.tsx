@@ -1,4 +1,5 @@
-import { FormEvent, useState } from 'react';
+import type { FormEvent} from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuth } from './AuthContext';

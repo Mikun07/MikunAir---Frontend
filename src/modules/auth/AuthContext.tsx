@@ -1,9 +1,11 @@
+import type {
+  ReactNode} from 'react';
 import {
   createContext,
-  ReactNode,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -30,7 +32,7 @@ interface AuthContextValue extends AuthState {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [state, setState] = useState<AuthState>({ user: null, accessToken: null, isRefreshing: true });
   const initialRefreshDone = useRef(false);
 
@@ -91,8 +93,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const value = useMemo(
+    () => ({ ...state, login, register, logout, refresh }),
+    [state, login, register, logout, refresh],
+  );
+
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout, refresh }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
