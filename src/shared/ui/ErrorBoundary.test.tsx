@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ErrorBoundary } from './ErrorBoundary';
 
-function BrokenComponent({ shouldThrow }: { shouldThrow: boolean }) {
+function BrokenComponent({ shouldThrow }: Readonly<{ shouldThrow: boolean }>) {
   if (shouldThrow) throw new Error('Test error');
   return <p>Working fine</p>;
 }
