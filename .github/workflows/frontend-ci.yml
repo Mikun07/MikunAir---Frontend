@@ -3,18 +3,8 @@ name: Frontend CI
 on:
   push:
     branches: ["**"]
-    paths:
-      - "frontend/**"
-      - ".github/workflows/frontend-ci.yml"
   pull_request:
     branches: ["**"]
-    paths:
-      - "frontend/**"
-      - ".github/workflows/frontend-ci.yml"
-
-defaults:
-  run:
-    working-directory: frontend
 
 jobs:
   ci:
@@ -28,9 +18,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -48,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-coverage
-          path: frontend/coverage/
+          path: coverage/
           retention-days: 7
 
       - name: Security audit
@@ -61,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: frontend/dist/
+          path: dist/
           retention-days: 7
 
       - name: Build Docker image
