@@ -119,9 +119,9 @@ export function BookingDetailPage() {
               <h2 id="passengers-heading" className="text-lg font-semibold text-gray-800 mb-3">
                 Passengers
               </h2>
-              <ul className="flex flex-col gap-2" role="list">
-                {booking.passengers.map((p, i) => (
-                  <li key={i}>
+              <ul className="flex flex-col gap-2">
+                {booking.passengers.map((p) => (
+                  <li key={p.documentNumber}>
                     <Card padding="sm">
                       <p className="font-medium text-gray-900">{p.fullName}</p>
                       <p className="text-sm text-gray-500">

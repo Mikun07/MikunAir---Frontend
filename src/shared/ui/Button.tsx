@@ -50,7 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <span aria-label="Loading" role="status">
+          <output aria-label="Loading">
             <svg
               className="animate-spin h-4 w-4"
               fill="none"
@@ -71,7 +71,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               />
             </svg>
-          </span>
+          </output>
         )}
         {children}
       </button>
