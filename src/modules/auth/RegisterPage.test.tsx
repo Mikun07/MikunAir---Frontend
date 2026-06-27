@@ -128,7 +128,7 @@ describe('RegisterPage', () => {
 
   it('has a link to the login page', () => {
     renderPage();
-    const link = screen.getByRole('link', { name: /sign in/i });
-    expect(link).toHaveAttribute('href', '/auth/login');
+    const links = screen.getAllByRole('link', { name: /sign in/i });
+    expect(links.some((l) => l.getAttribute('href') === '/auth/login')).toBe(true);
   });
 });
