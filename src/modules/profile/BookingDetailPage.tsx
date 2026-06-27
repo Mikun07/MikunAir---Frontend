@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosClient } from '@shared/api';
 import { Alert, Badge, Breadcrumbs, Button, Card, Modal, Spinner } from '@shared/ui';

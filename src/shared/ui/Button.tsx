@@ -45,7 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={isDisabled}
-        aria-disabled={String(isDisabled)}
+        aria-disabled={isDisabled || undefined}
         className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
       >
