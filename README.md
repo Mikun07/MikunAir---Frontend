@@ -84,7 +84,7 @@ src/
 
 ### Auth Pattern
 
-- Access token: stored in React context (memory only — never `localStorage`)
+- Access token: stored in React context (memory only never `localStorage`)
 - Refresh token: stored in HTTP-only cookie (set by backend)
 - Silent refresh: on app mount, `AuthProvider` calls `POST /auth/refresh`
 - Interceptor: Axios response interceptor retries once on 401 using the refresh token; on second 401, clears auth state and redirects to login
@@ -205,7 +205,7 @@ Full ADRs are in `docs/adr/`. Key decisions:
 | React SPA (not Next.js) | SEO not required; SPA is simpler and sufficient (ADR-001) |
 | Apollo Client for GraphQL | Flight search uses GraphQL; Apollo provides typed queries and caching |
 | Axios for REST | Booking, auth, and profile use REST; Axios interceptors power the silent-refresh pattern |
-| Access token in memory | Never persisted to storage — mitigates XSS token theft (ADR-003) |
+| Access token in memory | Never persisted to storage mitigates XSS token theft (ADR-003) |
 | TanStack Query (not Redux) | Server state only; no global client state needed beyond auth (ADR-004) |
 | Vitest (not Jest) | Vite-native; faster; no Babel transform needed; same config as app |
 | Tailwind v4 | Vite plugin integration; no PostCSS config; `@import "tailwindcss"` in CSS |
@@ -216,7 +216,7 @@ Full ADRs are in `docs/adr/`. Key decisions:
 
 - `dangerouslySetInnerHTML` is never used (ESLint `react/no-danger` enforced in CI)
 - Access token stored only in React state (not `localStorage` or `sessionStorage`)
-- Refresh token stored only in HTTP-only cookie — not readable by JavaScript
+- Refresh token stored only in HTTP-only cookie not readable by JavaScript
 - No secrets, credentials, or API keys are present in the frontend codebase
 - All user input is validated with Zod before submission
 

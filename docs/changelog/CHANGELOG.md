@@ -11,6 +11,15 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.1] - 2026-06-27
+
+### Fixed
+
+- **`frontend/.github/workflows/frontend-ci.yml`** — created the dedicated frontend CI pipeline that was documented in v1.1.0 but never committed; triggers only on changes under `frontend/**`; steps: TypeScript check, lint, unit/component tests with coverage, coverage artifact upload (7-day retention), security audit, production build, dist artifact upload (7-day retention), Docker image build (`--target serve`)
+- **`frontend/tsconfig.json`** — removed deprecated `baseUrl` option (warns in TS 5, removed in TS 7); updated `paths` entries to use explicit `./` prefix (`./src/shared/*`, `./src/modules/*`) as required when `baseUrl` is absent
+
+---
+
 ## [1.3.0] — 2026-07-07
 
 ### Added
