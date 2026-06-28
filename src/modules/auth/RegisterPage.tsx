@@ -145,7 +145,7 @@ export function RegisterPage() {
                     className="mt-0.5 accent-sky-500"
                     aria-describedby={errors.consentGiven ? 'consent-error' : undefined}
                   />
-                  I agree to the privacy policy and consent to my data being processed.
+                  <span>I agree to the privacy policy and consent to my data being processed.</span>
                 </label>
                 {errors.consentGiven && (
                   <p id="consent-error" role="alert" className="text-xs text-red-400 pl-6">
