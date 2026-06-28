@@ -16,7 +16,7 @@ export function DiscountBanner() {
   return (
     <section aria-label="Current deals and discount codes" className="w-full">
       <div className="flex items-center gap-2 mb-3">
-        <span className="inline-flex items-center gap-1.5 bg-promo/10 text-promo-dark px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
+        <span className="inline-flex items-center gap-1.5 bg-amber-400/10 text-amber-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
@@ -31,14 +31,14 @@ export function DiscountBanner() {
             key={deal.code}
             className="
               group relative flex flex-col gap-1 bg-white/5 border border-white/10
-              hover:bg-white/10 hover:border-promo/30
+              hover:bg-white/10 hover:border-amber-400/30
               rounded-2xl px-4 py-3 transition-colors cursor-default
             "
           >
-            <span className="text-promo font-bold text-lg leading-none">{deal.discount}</span>
+            <span className="text-amber-300 font-bold text-lg leading-none">{deal.discount}</span>
             <span className="text-white/90 text-xs font-medium leading-tight">{deal.description}</span>
             <div className="mt-1 flex items-center justify-between gap-2">
-              <code className="bg-white/10 text-promo text-xs font-mono px-2 py-0.5 rounded">
+              <code className="bg-white/10 text-amber-300 text-xs font-mono px-2 py-0.5 rounded">
                 {deal.code}
               </code>
               <span className="text-white/40 text-xs">{deal.expiry}</span>

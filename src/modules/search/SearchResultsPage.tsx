@@ -1,11 +1,27 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import type { FlightOption, FlightSearchParams } from '@shared/hooks';
 import { useFlightSearch } from '@shared/hooks';
-import { Alert, Button, Card } from '@shared/ui';
+import { useAuth } from '@modules/auth/AuthContext';
+import { Alert } from '@shared/ui';
 import { FlightResultsList } from './FlightResultsList';
 import type { SearchFormValues } from './SearchForm';
 import { SearchForm } from './SearchForm';
+
+function MikunAirWordmark() {
+  return (
+    <div className="inline-flex items-center gap-2 text-xl font-extrabold tracking-tight">
+      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow-lg shadow-sky-500/30">
+        <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+        </svg>
+      </span>
+      <span className="text-white">
+        Mikun<span className="text-sky-400">Air</span>
+      </span>
+    </div>
+  );
+}
 
 function paramsFromSearch(sp: URLSearchParams): FlightSearchParams | null {
   const origin = sp.get('origin');
@@ -29,6 +45,7 @@ function paramsFromSearch(sp: URLSearchParams): FlightSearchParams | null {
 
 export function SearchResultsPage() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = paramsFromSearch(searchParams);
 
@@ -83,52 +100,108 @@ export function SearchResultsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-surface px-4 py-8">
-      <div className="max-w-3xl mx-auto flex flex-col gap-6">
-        <Card>
-          <SearchForm onSearch={handleSearch} initialValues={initialValues} />
-        </Card>
-
-        {error && (
-          <Alert variant="error" title="Search failed" onRetry={() => void refetch()}>
-            Unable to load flights. Please try again.
-          </Alert>
-        )}
-
-        {!error && !isLoading && (data?.outbound?.length ?? 0) > 0 && (
-          <h2 className="text-xl font-bold text-ink">Available flights</h2>
-        )}
-
-        {!error && (
-          <>
-            <FlightResultsList
-              title="Outbound flights"
-              flights={data?.outbound ?? []}
-              isLoading={isLoading}
-              selectedId={selectedOutbound?.id ?? null}
-              onSelect={setSelectedOutbound}
-            />
-
-            {isReturnTrip && (
-              <FlightResultsList
-                title="Return flights"
-                flights={data?.inbound ?? []}
-                isLoading={isLoading}
-                selectedId={selectedInbound?.id ?? null}
-                onSelect={setSelectedInbound}
-              />
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)' }}
+    >
+      {/* Nav */}
+      <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-md bg-slate-900/60">
+        <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link to="/" aria-label="MikunAir home">
+            <MikunAirWordmark />
+          </Link>
+          <nav className="flex items-center gap-1" aria-label="Main navigation">
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="px-4 py-1.5 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
+                  My bookings
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => { void logout().then(() => navigate('/auth/login')); }}
+                  className="px-4 py-1.5 text-sm font-medium text-slate-900 bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="px-4 py-1.5 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/auth/register"
+                  className="px-4 py-1.5 text-sm font-medium text-slate-900 bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
+                  Create account
+                </Link>
+              </>
             )}
-          </>
-        )}
+          </nav>
+        </div>
+      </header>
 
-        {canContinue && (
-          <div className="flex justify-end">
-            <Button size="lg" onClick={handleContinue}>
-              Continue to booking
-            </Button>
+      <main className="flex-1 px-4 py-8">
+        <div className="max-w-3xl mx-auto flex flex-col gap-6">
+
+          {/* Search form */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl shadow-black/40">
+            <SearchForm onSearch={handleSearch} initialValues={initialValues} />
           </div>
-        )}
-      </div>
-    </main>
+
+          {error && (
+            <Alert variant="error" title="Search failed" onRetry={() => void refetch()}>
+              Unable to load flights. Please try again.
+            </Alert>
+          )}
+
+          {!error && (
+            <div className="flex flex-col gap-6">
+              <FlightResultsList
+                title="Outbound flights"
+                flights={data?.outbound ?? []}
+                isLoading={isLoading}
+                selectedId={selectedOutbound?.id ?? null}
+                onSelect={setSelectedOutbound}
+              />
+
+              {isReturnTrip && (
+                <FlightResultsList
+                  title="Return flights"
+                  flights={data?.inbound ?? []}
+                  isLoading={isLoading}
+                  selectedId={selectedInbound?.id ?? null}
+                  onSelect={setSelectedInbound}
+                />
+              )}
+            </div>
+          )}
+
+          {canContinue && (
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handleContinue}
+                className="px-8 py-3 rounded-2xl text-sm font-semibold bg-sky-500 hover:bg-sky-400 text-white transition-colors shadow-lg shadow-sky-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              >
+                Continue to booking
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
+
+      <footer className="border-t border-white/5 py-6">
+        <p className="text-center text-xs text-white/20">
+          © 2026 MikunAir. Portfolio project by Festus-Olaleye Ayomikun.
+        </p>
+      </footer>
+    </div>
   );
 }

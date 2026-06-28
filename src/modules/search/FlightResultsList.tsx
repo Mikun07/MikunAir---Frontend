@@ -1,6 +1,6 @@
 import type { FlightOption } from '@shared/hooks';
 import { usePagination } from '@shared/hooks';
-import { Spinner, Pagination, EmptyState } from '@shared/ui';
+import { Spinner, Pagination } from '@shared/ui';
 import { FlightCard } from './FlightCard';
 
 const PAGE_SIZE = 5;
@@ -25,21 +25,21 @@ export function FlightResultsList({
 
   return (
     <section aria-labelledby={headingId}>
-      <h2 id={headingId} className="text-lg font-semibold text-gray-800 mb-3">
+      <h2 id={headingId} className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">
         {title}
       </h2>
 
       {isLoading && (
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center py-10">
           <Spinner label={`Loading ${title.toLowerCase()}…`} />
         </div>
       )}
 
       {!isLoading && flights.length === 0 && (
-        <EmptyState
-          title="No flights found"
-          description="Try adjusting your dates, origin or destination."
-        />
+        <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-10 text-center">
+          <p className="text-white/40 text-sm">No flights found for this route and date.</p>
+          <p className="text-white/25 text-xs mt-1">Try adjusting your dates or destination.</p>
+        </div>
       )}
 
       {!isLoading && flights.length > 0 && (
@@ -58,13 +58,15 @@ export function FlightResultsList({
               </li>
             ))}
           </ul>
-          <div className="mt-4">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={goToPage}
-            />
-          </div>
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={goToPage}
+              />
+            </div>
+          )}
         </>
       )}
     </section>

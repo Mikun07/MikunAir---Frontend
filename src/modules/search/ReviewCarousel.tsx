@@ -30,7 +30,7 @@ const REVIEWS: Review[] = [
     text: 'Incredibly smooth experience from search to boarding pass. I love that I can differentiate adult and child passengers. Travelling with my kids has never been this stress-free.',
     route: 'OSL → CPH',
     initials: 'EH',
-    avatarColor: 'bg-sky',
+    avatarColor: 'bg-sky-500',
   },
   {
     id: 3,
@@ -70,7 +70,7 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: 5 }, (_, i) => (
         <svg
           key={i}
-          className={`h-4 w-4 ${i < rating ? 'text-promo' : 'text-white/20'}`}
+          className={`h-4 w-4 ${i < rating ? 'text-amber-400' : 'text-white/20'}`}
           viewBox="0 0 24 24"
           fill="currentColor"
           aria-hidden="true"
@@ -150,7 +150,7 @@ export function ReviewCarousel() {
                 <span className="text-white/50 text-xs">{review.location}</span>
               </div>
             </div>
-            <span className="text-sky text-xs font-mono font-semibold bg-white/5 px-3 py-1 rounded-full">
+            <span className="text-sky-400 text-xs font-mono font-semibold bg-white/5 px-3 py-1 rounded-full">
               {review.route}
             </span>
           </div>
@@ -169,7 +169,7 @@ export function ReviewCarousel() {
               aria-current={i === activeIndex ? 'true' : undefined}
               className={`
                 h-1.5 rounded-full transition-all
-                ${i === activeIndex ? 'w-6 bg-sky' : 'w-1.5 bg-white/20 hover:bg-white/40'}
+                ${i === activeIndex ? 'w-6 bg-sky-400' : 'w-1.5 bg-white/20 hover:bg-white/40'}
               `}
             />
           ))}
@@ -182,7 +182,7 @@ export function ReviewCarousel() {
             className="
               h-8 w-8 rounded-full border border-white/20 flex items-center justify-center
               text-white/60 hover:text-white hover:border-white/40
-              transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky
+              transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
             "
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -196,7 +196,7 @@ export function ReviewCarousel() {
             className="
               h-8 w-8 rounded-full border border-white/20 flex items-center justify-center
               text-white/60 hover:text-white hover:border-white/40
-              transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky
+              transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
             "
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

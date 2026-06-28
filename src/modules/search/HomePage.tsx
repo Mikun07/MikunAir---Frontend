@@ -9,21 +9,17 @@ import { Alert } from '@shared/ui';
 
 function MikunAirLogo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const textSize = size === 'lg' ? 'text-3xl' : size === 'md' ? 'text-2xl' : 'text-xl';
+  const iconSize = size === 'lg' ? 'h-10 w-10' : 'h-8 w-8';
+  const svgSize = size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
   return (
     <div className={`inline-flex items-center gap-2 ${textSize} font-extrabold tracking-tight`}>
-      {/* Plane icon */}
-      <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-sky shadow-lg shadow-sky/30">
-        <svg
-          className="h-5 w-5 text-white"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
+      <span className={`flex ${iconSize} items-center justify-center rounded-xl bg-sky-500 shadow-lg shadow-sky-500/30`}>
+        <svg className={`${svgSize} text-white`} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
         </svg>
       </span>
       <span className="text-white">
-        Mikun<span className="text-sky">Air</span>
+        Mikun<span className="text-sky-400">Air</span>
       </span>
     </div>
   );
@@ -70,12 +66,12 @@ function PopularRoutes({ onRouteClick }: { onRouteClick: (from: string, to: stri
             onClick={() => onRouteClick(route.from, route.to)}
             className="
               group flex flex-col gap-0.5 bg-white/5 hover:bg-white/10
-              border border-white/10 hover:border-sky/40
+              border border-white/10 hover:border-sky-400/40
               rounded-2xl px-4 py-3 text-left transition-colors
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-sky
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
             "
           >
-            <span className="text-white text-sm font-medium leading-tight group-hover:text-sky transition-colors">
+            <span className="text-white text-sm font-medium leading-tight group-hover:text-sky-400 transition-colors">
               {route.label}
             </span>
             <span className="text-promo text-xs font-semibold">{route.price}</span>
@@ -114,22 +110,24 @@ export function HomePage() {
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)' }}>
       {/* Navigation bar */}
-      <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-md bg-midnight/60">
+      <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-md bg-slate-900/60">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <MikunAirLogo size="sm" />
+          <Link to="/" aria-label="MikunAir home">
+            <MikunAirLogo size="sm" />
+          </Link>
           <nav className="flex items-center gap-1" aria-label="Main navigation">
             {!isRefreshing && user ? (
               <>
                 <Link
                   to="/profile"
-                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   My bookings
                 </Link>
                 <button
                   type="button"
                   onClick={() => { void logout().then(() => navigate('/auth/login')); }}
-                  className="px-4 py-2 text-sm font-medium text-midnight bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                  className="px-4 py-2 text-sm font-medium text-slate-900 bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Sign out
                 </button>
@@ -138,13 +136,13 @@ export function HomePage() {
               <>
                 <Link
                   to="/auth/login"
-                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                  className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Sign in
                 </Link>
                 <Link
                   to="/auth/register"
-                  className="px-4 py-2 text-sm font-medium text-midnight bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+                  className="px-4 py-2 text-sm font-medium text-slate-900 bg-white hover:bg-white/90 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
                 >
                   Create account
                 </Link>
@@ -221,7 +219,7 @@ export function HomePage() {
                 <span className="bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs px-3 py-1.5 rounded-full font-medium">
                   ✈ 37 airlines
                 </span>
-                <span className="bg-sky/20 backdrop-blur-sm border border-sky/30 text-sky text-xs px-3 py-1.5 rounded-full font-medium">
+                <span className="bg-sky-500/20 backdrop-blur-sm border border-sky-500/30 text-sky-400 text-xs px-3 py-1.5 rounded-full font-medium">
                   🌍 120+ destinations
                 </span>
               </div>

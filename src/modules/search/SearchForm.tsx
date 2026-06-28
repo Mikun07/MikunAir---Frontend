@@ -1,7 +1,7 @@
 import type { FormEvent} from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
-import { Button, Alert } from '@shared/ui';
+import { Alert } from '@shared/ui';
 import { AirportCombobox } from './AirportCombobox';
 import type { PassengerCounts } from './PassengerPicker';
 import { PassengerPicker } from './PassengerPicker';
@@ -125,7 +125,7 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
         <legend className="sr-only">Trip type</legend>
         <div
           role="group"
-          className="inline-flex bg-mist/50 rounded-xl p-1 gap-1"
+          className="inline-flex bg-white/5 border border-white/10 rounded-xl p-1 gap-1"
           aria-label="Trip type"
         >
           {(['one-way', 'round-trip'] as const).map((type) => (
@@ -135,8 +135,8 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
                 px-4 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-colors select-none
                 ${
                   tripType === type
-                    ? 'bg-white text-ink shadow-sm'
-                    : 'text-slate hover:text-ink'
+                    ? 'bg-sky-500 text-white shadow-sm'
+                    : 'text-white/50 hover:text-white/80'
                 }
               `}
             >
@@ -179,9 +179,9 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
 
       {/* Date row */}
       <div className={`grid grid-cols-1 gap-4 ${isRoundTrip ? 'sm:grid-cols-2' : ''}`}>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="departure-date" className="text-sm font-medium text-ink">
-            Departure date <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="departure-date" className="text-sm font-medium text-white/70">
+            Departure date <span className="text-red-400 ml-0.5" aria-hidden="true">*</span>
           </label>
           <input
             id="departure-date"
@@ -191,21 +191,22 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
             onChange={(e) => setDepartureDate(e.target.value)}
             aria-invalid={errors.departureDate ? 'true' : undefined}
             className={`
-              px-3 py-2.5 text-sm rounded-xl border bg-white text-ink
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:border-sky
-              transition-colors
-              ${errors.departureDate ? 'border-red-400 bg-red-50' : 'border-mist hover:border-sky/60'}
+              px-3 py-2.5 text-sm rounded-xl border bg-white/5 text-white
+              placeholder:text-white/30
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:border-sky-400
+              transition-colors scheme-dark
+              ${errors.departureDate ? 'border-red-400/60 bg-red-500/10' : 'border-white/10 hover:border-white/20'}
             `}
           />
           {errors.departureDate && (
-            <p role="alert" className="text-xs text-red-500">{errors.departureDate}</p>
+            <p role="alert" className="text-xs text-red-400">{errors.departureDate}</p>
           )}
         </div>
 
         {isRoundTrip && (
-          <div className="flex flex-col gap-1">
-            <label htmlFor="return-date" className="text-sm font-medium text-ink">
-              Return date <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="return-date" className="text-sm font-medium text-white/70">
+              Return date <span className="text-red-400 ml-0.5" aria-hidden="true">*</span>
             </label>
             <input
               id="return-date"
@@ -215,14 +216,15 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
               onChange={(e) => setReturnDate(e.target.value)}
               aria-invalid={errors.returnDate ? 'true' : undefined}
               className={`
-                px-3 py-2.5 text-sm rounded-xl border bg-white text-ink
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:border-sky
-                transition-colors
-                ${errors.returnDate ? 'border-red-400 bg-red-50' : 'border-mist hover:border-sky/60'}
+                px-3 py-2.5 text-sm rounded-xl border bg-white/5 text-white
+                placeholder:text-white/30
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:border-sky-400
+                transition-colors scheme-dark
+                ${errors.returnDate ? 'border-red-400/60 bg-red-500/10' : 'border-white/10 hover:border-white/20'}
               `}
             />
             {errors.returnDate && (
-              <p role="alert" className="text-xs text-red-500">{errors.returnDate}</p>
+              <p role="alert" className="text-xs text-red-400">{errors.returnDate}</p>
             )}
           </div>
         )}
@@ -236,8 +238,8 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
           error={errors.adults}
         />
 
-        <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-ink">Seat class</span>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-white/70">Seat class</span>
           <div className="flex gap-2">
             {SEAT_CLASSES.map(({ value: cls, label }) => (
               <label
@@ -246,8 +248,8 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
                   flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-sm font-medium cursor-pointer transition-colors
                   ${
                     seatClass === cls
-                      ? 'border-sky bg-sky/10 text-sky'
-                      : 'border-mist bg-white text-ink hover:border-sky/60'
+                      ? 'border-sky-500/60 bg-sky-500/10 text-sky-300'
+                      : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20 hover:text-white/70'
                   }
                 `}
               >
@@ -270,9 +272,12 @@ export function SearchForm({ onSearch, initialValues = {} }: SearchFormProps) {
         <Alert variant="error">{errors._form}</Alert>
       )}
 
-      <Button type="submit" size="lg" className="w-full rounded-xl bg-sky hover:bg-sky/90 text-white border-0">
+      <button
+        type="submit"
+        className="w-full px-6 py-3 rounded-xl text-sm font-semibold bg-sky-500 hover:bg-sky-400 text-white transition-colors shadow-lg shadow-sky-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+      >
         Search flights
-      </Button>
+      </button>
     </form>
   );
 }

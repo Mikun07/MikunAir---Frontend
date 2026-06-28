@@ -83,18 +83,18 @@ export function AirportCombobox({
     activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined;
 
   return (
-    <div ref={containerRef} className="relative flex flex-col gap-1">
-      <label htmlFor={inputId} className="text-sm font-medium text-ink">
+    <div ref={containerRef} className="relative flex flex-col gap-1.5">
+      <label htmlFor={inputId} className="text-sm font-medium text-white/70">
         {label}
         {required && (
-          <span className="text-red-500 ml-1" aria-hidden="true">
+          <span className="text-red-400 ml-1" aria-hidden="true">
             *
           </span>
         )}
       </label>
 
       <div className="relative">
-        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate">
+        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/30">
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />
@@ -120,11 +120,11 @@ export function AirportCombobox({
           autoComplete="off"
           spellCheck={false}
           className={`
-            w-full pl-9 pr-3 py-2.5 text-sm rounded-xl border bg-white text-ink
-            placeholder:text-slate/60
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:border-sky
+            w-full pl-9 pr-3 py-2.5 text-sm rounded-xl border bg-white/5 text-white
+            placeholder:text-white/25
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:border-sky-400
             transition-colors
-            ${error ? 'border-red-400 bg-red-50' : 'border-mist hover:border-sky/60'}
+            ${error ? 'border-red-400/60 bg-red-500/10' : 'border-white/10 hover:border-white/20'}
           `}
         />
       </div>
@@ -134,7 +134,7 @@ export function AirportCombobox({
           id={listboxId}
           role="listbox"
           aria-label={`${label} suggestions`}
-          className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-mist rounded-xl shadow-lg overflow-hidden"
+          className="absolute top-full left-0 right-0 z-50 mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-2xl shadow-black/40 overflow-hidden"
         >
           {suggestions.map((airport, i) => (
             <li
@@ -149,16 +149,16 @@ export function AirportCombobox({
               onMouseEnter={() => setActiveIndex(i)}
               className={`
                 flex items-center gap-3 px-4 py-3 cursor-pointer text-sm transition-colors
-                ${i === activeIndex ? 'bg-sky/10 text-sky' : 'text-ink hover:bg-mist/40'}
-                ${i < suggestions.length - 1 ? 'border-b border-mist/60' : ''}
+                ${i === activeIndex ? 'bg-sky-500/20 text-sky-300' : 'text-white/70 hover:bg-white/5 hover:text-white'}
+                ${i < suggestions.length - 1 ? 'border-b border-white/5' : ''}
               `}
             >
-              <span className="w-10 shrink-0 font-mono font-bold text-base text-sky">
+              <span className="w-10 shrink-0 font-mono font-bold text-base text-sky-400">
                 {airport.iataCode}
               </span>
               <span className="flex flex-col leading-tight">
-                <span className="font-medium">{airport.city}</span>
-                <span className="text-xs text-slate">{airport.name} · {airport.country}</span>
+                <span className="font-medium text-white">{airport.city}</span>
+                <span className="text-xs text-white/40">{airport.name} · {airport.country}</span>
               </span>
             </li>
           ))}
@@ -166,7 +166,7 @@ export function AirportCombobox({
       )}
 
       {error && (
-        <p id={errorId} role="alert" className="text-xs text-red-500">
+        <p id={errorId} role="alert" className="text-xs text-red-400">
           {error}
         </p>
       )}

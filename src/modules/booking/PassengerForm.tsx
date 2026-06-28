@@ -22,12 +22,13 @@ export function PassengerForm({ index, value, errors, onChange }: PassengerFormP
   const prefix = `passenger-${index}`;
 
   return (
-    <fieldset className="border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
-      <legend className="text-sm font-semibold text-gray-700 px-1">
+    <fieldset className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-4">
+      <legend className="text-sm font-semibold text-sky-400 px-1">
         Passenger {index + 1}
       </legend>
 
       <Input
+        dark
         id={`${prefix}-name`}
         label="Full name"
         value={value.fullName}
@@ -38,6 +39,7 @@ export function PassengerForm({ index, value, errors, onChange }: PassengerFormP
       />
 
       <Input
+        dark
         id={`${prefix}-dob`}
         label="Date of birth"
         type="date"
@@ -47,9 +49,9 @@ export function PassengerForm({ index, value, errors, onChange }: PassengerFormP
         required
       />
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor={`${prefix}-doctype`} className="text-sm font-medium text-gray-700">
-          Document type <span className="text-red-600 ml-1" aria-hidden="true">*</span>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={`${prefix}-doctype`} className="text-sm font-medium text-white/70">
+          Document type <span className="text-red-400 ml-1" aria-hidden="true">*</span>
         </label>
         <select
           id={`${prefix}-doctype`}
@@ -57,15 +59,16 @@ export function PassengerForm({ index, value, errors, onChange }: PassengerFormP
           onChange={(e) =>
             onChange({ ...value, documentType: e.target.value as PassengerDTO['documentType'] })
           }
-          className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
+          className="bg-white/5 border border-white/10 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:border-sky-400 transition-colors"
           aria-required="true"
         >
-          <option value="PASSPORT">Passport</option>
-          <option value="ID_CARD">ID Card</option>
+          <option value="PASSPORT" className="bg-slate-800">Passport</option>
+          <option value="ID_CARD" className="bg-slate-800">ID Card</option>
         </select>
       </div>
 
       <Input
+        dark
         id={`${prefix}-docnum`}
         label="Document number"
         value={value.documentNumber}

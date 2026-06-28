@@ -34,8 +34,8 @@ function Counter({
   return (
     <div className="flex items-center justify-between py-3">
       <div className="flex flex-col leading-tight">
-        <span className="text-sm font-medium text-ink">{label}</span>
-        <span className="text-xs text-slate">{subLabel}</span>
+        <span className="text-sm font-medium text-white">{label}</span>
+        <span className="text-xs text-white/40">{subLabel}</span>
       </div>
       <div className="flex items-center gap-3">
         <button
@@ -44,16 +44,16 @@ function Counter({
           disabled={decrementDisabled}
           aria-label={`Remove ${label.toLowerCase()}`}
           className="
-            w-8 h-8 rounded-full border border-mist flex items-center justify-center
-            text-sky text-lg font-bold leading-none
-            hover:bg-sky/10 hover:border-sky
+            w-8 h-8 rounded-full border border-white/10 flex items-center justify-center
+            text-sky-400 text-lg font-bold leading-none
+            hover:bg-sky-500/20 hover:border-sky-500/40
             disabled:opacity-30 disabled:cursor-not-allowed
-            transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky
+            transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
           "
         >
           −
         </button>
-        <span className="w-5 text-center text-sm font-semibold text-ink" aria-live="polite">
+        <span className="w-5 text-center text-sm font-semibold text-white" aria-live="polite">
           {value}
         </span>
         <button
@@ -62,11 +62,11 @@ function Counter({
           disabled={incrementDisabled}
           aria-label={`Add ${label.toLowerCase()}`}
           className="
-            w-8 h-8 rounded-full border border-mist flex items-center justify-center
-            text-sky text-lg font-bold leading-none
-            hover:bg-sky/10 hover:border-sky
+            w-8 h-8 rounded-full border border-white/10 flex items-center justify-center
+            text-sky-400 text-lg font-bold leading-none
+            hover:bg-sky-500/20 hover:border-sky-500/40
             disabled:opacity-30 disabled:cursor-not-allowed
-            transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky
+            transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
           "
         >
           +
@@ -116,8 +116,8 @@ export function PassengerPicker({ value, onChange, error }: PassengerPickerProps
     .join(', ');
 
   return (
-    <div ref={containerRef} className="relative flex flex-col gap-1">
-      <span className="text-sm font-medium text-ink">Passengers</span>
+    <div ref={containerRef} className="relative flex flex-col gap-1.5">
+      <span className="text-sm font-medium text-white/70">Passengers</span>
 
       <button
         type="button"
@@ -126,21 +126,21 @@ export function PassengerPicker({ value, onChange, error }: PassengerPickerProps
         aria-label={`Passengers: ${label}`}
         onClick={() => setOpen(!isOpen)}
         className={`
-          flex items-center gap-2 px-3 py-2.5 text-sm rounded-xl border bg-white text-left text-ink
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:border-sky
+          flex items-center gap-2 px-3 py-2.5 text-sm rounded-xl border bg-white/5 text-left text-white
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:border-sky-400
           transition-colors
-          ${error ? 'border-red-400 bg-red-50' : 'border-mist hover:border-sky/60'}
+          ${error ? 'border-red-400/60 bg-red-500/10' : 'border-white/10 hover:border-white/20'}
         `}
       >
-        <svg className="h-4 w-4 text-slate shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <svg className="h-4 w-4 text-white/30 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
           <circle cx="9" cy="7" r="4" />
           <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
-        <span className="flex-1">{label}</span>
+        <span className="flex-1 text-white/70">{label}</span>
         <svg
-          className={`h-4 w-4 text-slate transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 text-white/30 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"
         >
           <path d="m6 9 6 6 6-6" />
@@ -151,7 +151,7 @@ export function PassengerPicker({ value, onChange, error }: PassengerPickerProps
         <div
           role="dialog"
           aria-label="Select passengers"
-          className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-mist rounded-xl shadow-lg px-4 py-1"
+          className="absolute top-full left-0 right-0 z-50 mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-2xl shadow-black/40 px-4 py-1"
         >
           <Counter
             label="Adults"
@@ -162,7 +162,7 @@ export function PassengerPicker({ value, onChange, error }: PassengerPickerProps
             decrementDisabled={value.adults <= 1}
             incrementDisabled={atMax}
           />
-          <div className="border-t border-mist/60" />
+          <div className="border-t border-white/5" />
           <Counter
             label="Children"
             subLabel="Age 2–11"
@@ -174,19 +174,19 @@ export function PassengerPicker({ value, onChange, error }: PassengerPickerProps
           />
 
           {childWarning && (
-            <p role="alert" className="text-xs text-amber-600 pb-2 pt-1">
+            <p role="alert" className="text-xs text-amber-400 pb-2 pt-1">
               Children reduced to match adult count — every child must travel with an adult.
             </p>
           )}
 
-          <p className="text-xs text-slate pb-3 pt-1">
+          <p className="text-xs text-white/30 pb-3 pt-1">
             Children must travel with at least one adult. Max {MAX_TOTAL} passengers.
           </p>
         </div>
       )}
 
       {error && (
-        <p role="alert" className="text-xs text-red-500">
+        <p role="alert" className="text-xs text-red-400">
           {error}
         </p>
       )}
