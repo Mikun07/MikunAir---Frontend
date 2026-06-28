@@ -6,12 +6,24 @@ import { BookingFlow } from './BookingFlow';
 
 const mockCreateBooking = vi.fn();
 const mockNavigate = vi.fn();
+const mockLogout = vi.fn();
 
 vi.mock('@shared/hooks', () => ({
   useBooking: () => ({
     createBooking: mockCreateBooking,
     isLoading: false,
     error: null,
+  }),
+}));
+
+vi.mock('@modules/auth/AuthContext', () => ({
+  useAuth: () => ({
+    user: { id: 'u1', email: 'test@example.com', role: 'USER' },
+    accessToken: 'tok-test',
+    isRefreshing: false,
+    login: vi.fn(),
+    logout: mockLogout,
+    register: vi.fn(),
   }),
 }));
 
@@ -36,6 +48,7 @@ function renderFlow() {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mockLogout.mockResolvedValue(undefined);
 });
 
 describe('BookingFlow wizard', () => {
