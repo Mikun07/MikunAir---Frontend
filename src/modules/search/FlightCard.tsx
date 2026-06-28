@@ -14,12 +14,11 @@ export function FlightCard({ flight, selected = false, onSelect }: Readonly<Flig
   return (
     <article
       aria-label={`Flight ${flightNumber} from ${origin.city} to ${destination.city}`}
-      className={`rounded-2xl border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors cursor-pointer ${
+      className={`rounded-2xl border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${
         selected
           ? 'border-sky-500/60 bg-sky-500/10'
-          : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
+          : 'border-white/10 bg-white/5'
       }`}
-      onClick={() => onSelect(flight)}
     >
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
@@ -75,7 +74,7 @@ export function FlightCard({ flight, selected = false, onSelect }: Readonly<Flig
         </dl>
         <button
           type="button"
-          onClick={(e) => { e.stopPropagation(); onSelect(flight); }}
+          onClick={() => onSelect(flight)}
           aria-pressed={selected}
           className={`shrink-0 px-4 py-1.5 rounded-xl text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
             selected
