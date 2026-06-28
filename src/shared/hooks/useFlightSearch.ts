@@ -24,9 +24,19 @@ export interface FlightOption {
   destination: Airport;
 }
 
+export interface ConnectingFlightOption {
+  leg1: FlightOption;
+  leg2: FlightOption;
+  layoverMinutes: number;
+  totalDurationMinutes: number;
+  totalFarePerPassenger: Fare;
+}
+
 export interface FlightSearchResult {
   outbound: FlightOption[];
-  inbound: FlightOption[];
+  inbound: FlightOption[] | null;
+  connectingOutbound: ConnectingFlightOption[];
+  connectingInbound: ConnectingFlightOption[] | null;
 }
 
 export interface FlightSearchParams {
@@ -66,6 +76,18 @@ const SEARCH_FLIGHTS = gql`
         farePerPassenger { baseFarePence taxesPence totalPence currency }
         origin { iataCode city }
         destination { iataCode city }
+      }
+      connectingOutbound {
+        layoverMinutes totalDurationMinutes
+        totalFarePerPassenger { baseFarePence taxesPence totalPence currency }
+        leg1 { id flightNumber departureAt arrivalAt durationMinutes availableSeats farePerPassenger { baseFarePence taxesPence totalPence currency } origin { iataCode city } destination { iataCode city } }
+        leg2 { id flightNumber departureAt arrivalAt durationMinutes availableSeats farePerPassenger { baseFarePence taxesPence totalPence currency } origin { iataCode city } destination { iataCode city } }
+      }
+      connectingInbound {
+        layoverMinutes totalDurationMinutes
+        totalFarePerPassenger { baseFarePence taxesPence totalPence currency }
+        leg1 { id flightNumber departureAt arrivalAt durationMinutes availableSeats farePerPassenger { baseFarePence taxesPence totalPence currency } origin { iataCode city } destination { iataCode city } }
+        leg2 { id flightNumber departureAt arrivalAt durationMinutes availableSeats farePerPassenger { baseFarePence taxesPence totalPence currency } origin { iataCode city } destination { iataCode city } }
       }
     }
   }

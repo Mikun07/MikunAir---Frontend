@@ -1,12 +1,74 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
-import type { FlightOption, FlightSearchParams } from '@shared/hooks';
+import type { FlightOption, ConnectingFlightOption, FlightSearchParams } from '@shared/hooks';
 import { useFlightSearch } from '@shared/hooks';
 import { useAuth } from '@modules/auth/AuthContext';
-import { Alert } from '@shared/ui';
+import { Alert, Spinner, Pagination } from '@shared/ui';
+import { usePagination } from '@shared/hooks';
 import { FlightResultsList } from './FlightResultsList';
+import { ConnectingFlightCard } from './ConnectingFlightCard';
 import type { SearchFormValues } from './SearchForm';
 import { SearchForm } from './SearchForm';
+
+const CONNECTING_PAGE_SIZE = 5;
+
+interface ConnectingListProps {
+  title: string;
+  options: ConnectingFlightOption[];
+  isLoading: boolean;
+  selectedKey: string | null;
+  onSelect: (option: ConnectingFlightOption) => void;
+}
+
+function ConnectingFlightResultsList({ title, options, isLoading, selectedKey, onSelect }: Readonly<ConnectingListProps>) {
+  const headingId = `${title.toLowerCase().replace(/\s+/g, '-')}-heading`;
+  const { currentPage, totalPages, pageItems, goToPage } = usePagination(options, CONNECTING_PAGE_SIZE);
+  const key = (o: ConnectingFlightOption) => `${o.leg1.id}-${o.leg2.id}`;
+
+  return (
+    <section aria-labelledby={headingId}>
+      <h2 id={headingId} className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">
+        {title}
+      </h2>
+
+      {isLoading && (
+        <div className="flex justify-center py-10">
+          <Spinner label={`Loading ${title.toLowerCase()}…`} />
+        </div>
+      )}
+
+      {!isLoading && options.length === 0 && (
+        <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-10 text-center">
+          <p className="text-white/40 text-sm">No connecting flights found for this route and date.</p>
+        </div>
+      )}
+
+      {!isLoading && options.length > 0 && (
+        <>
+          <p className="sr-only" aria-live="polite">
+            {options.length} connecting {options.length === 1 ? 'option' : 'options'} found
+          </p>
+          <ul className="flex flex-col gap-3">
+            {pageItems.map((option) => (
+              <li key={key(option)}>
+                <ConnectingFlightCard
+                  option={option}
+                  selected={key(option) === selectedKey}
+                  onSelect={onSelect}
+                />
+              </li>
+            ))}
+          </ul>
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={goToPage} />
+            </div>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
 
 function MikunAirWordmark() {
   return (
@@ -53,6 +115,8 @@ export function SearchResultsPage() {
 
   const [selectedOutbound, setSelectedOutbound] = useState<FlightOption | null>(null);
   const [selectedInbound, setSelectedInbound] = useState<FlightOption | null>(null);
+  const [selectedConnectingOutbound, setSelectedConnectingOutbound] = useState<ConnectingFlightOption | null>(null);
+  const [selectedConnectingInbound, setSelectedConnectingInbound] = useState<ConnectingFlightOption | null>(null);
 
   const isReturnTrip = Boolean(searchParams.get('returnDate'));
 
@@ -70,23 +134,38 @@ export function SearchResultsPage() {
     setSearchParams(params);
     setSelectedOutbound(null);
     setSelectedInbound(null);
+    setSelectedConnectingOutbound(null);
+    setSelectedConnectingInbound(null);
   }
 
   function handleContinue() {
-    if (!selectedOutbound) return;
     const adults = searchParams.get('adults') ?? '1';
     const children = searchParams.get('children') ?? '0';
     const seatClass = searchParams.get('seatClass') ?? 'ECONOMY';
-    const params = new URLSearchParams({
-      outboundFlightId: selectedOutbound.id,
-      passengers: String(Math.max(1, Number(adults) + Number(children))),
-      seatClass,
-    });
-    if (selectedInbound) params.set('inboundFlightId', selectedInbound.id);
+    const passengers = String(Math.max(1, Number(adults) + Number(children)));
+
+    const outbound = selectedOutbound ?? selectedConnectingOutbound?.leg1 ?? null;
+    if (!outbound) return;
+
+    const params = new URLSearchParams({ outboundFlightId: outbound.id, passengers, seatClass });
+
+    if (selectedConnectingOutbound) {
+      params.set('outboundLeg2FlightId', selectedConnectingOutbound.leg2.id);
+    }
+    if (selectedInbound) {
+      params.set('inboundFlightId', selectedInbound.id);
+    }
+    if (selectedConnectingInbound) {
+      params.set('inboundFlightId', selectedConnectingInbound.leg1.id);
+      params.set('inboundLeg2FlightId', selectedConnectingInbound.leg2.id);
+    }
+
     navigate(`/booking?${params.toString()}`);
   }
 
-  const canContinue = selectedOutbound !== null && (!isReturnTrip || selectedInbound !== null);
+  const hasOutbound = selectedOutbound !== null || selectedConnectingOutbound !== null;
+  const hasInbound = selectedInbound !== null || selectedConnectingInbound !== null;
+  const canContinue = hasOutbound && (!isReturnTrip || hasInbound);
 
   const initialValues: Partial<SearchFormValues> = {
     origin: searchParams.get('origin') ?? '',
@@ -168,17 +247,35 @@ export function SearchResultsPage() {
                 flights={data?.outbound ?? []}
                 isLoading={isLoading}
                 selectedId={selectedOutbound?.id ?? null}
-                onSelect={setSelectedOutbound}
+                onSelect={(f) => { setSelectedOutbound(f); setSelectedConnectingOutbound(null); }}
+              />
+
+              <ConnectingFlightResultsList
+                title="Outbound connecting flights"
+                options={data?.connectingOutbound ?? []}
+                isLoading={isLoading}
+                selectedKey={selectedConnectingOutbound ? `${selectedConnectingOutbound.leg1.id}-${selectedConnectingOutbound.leg2.id}` : null}
+                onSelect={(o) => { setSelectedConnectingOutbound(o); setSelectedOutbound(null); }}
               />
 
               {isReturnTrip && (
-                <FlightResultsList
-                  title="Return flights"
-                  flights={data?.inbound ?? []}
-                  isLoading={isLoading}
-                  selectedId={selectedInbound?.id ?? null}
-                  onSelect={setSelectedInbound}
-                />
+                <>
+                  <FlightResultsList
+                    title="Return flights"
+                    flights={data?.inbound ?? []}
+                    isLoading={isLoading}
+                    selectedId={selectedInbound?.id ?? null}
+                    onSelect={(f) => { setSelectedInbound(f); setSelectedConnectingInbound(null); }}
+                  />
+
+                  <ConnectingFlightResultsList
+                    title="Return connecting flights"
+                    options={data?.connectingInbound ?? []}
+                    isLoading={isLoading}
+                    selectedKey={selectedConnectingInbound ? `${selectedConnectingInbound.leg1.id}-${selectedConnectingInbound.leg2.id}` : null}
+                    onSelect={(o) => { setSelectedConnectingInbound(o); setSelectedInbound(null); }}
+                  />
+                </>
               )}
             </div>
           )}
