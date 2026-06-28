@@ -19,7 +19,7 @@ export function FlightResultsList({
   isLoading,
   selectedId,
   onSelect,
-}: FlightResultsListProps) {
+}: Readonly<FlightResultsListProps>) {
   const headingId = `${title.toLowerCase().replace(/\s+/g, '-')}-heading`;
   const { currentPage, totalPages, pageItems, goToPage } = usePagination(flights, PAGE_SIZE);
 
@@ -47,7 +47,7 @@ export function FlightResultsList({
           <p className="sr-only" aria-live="polite">
             {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
           </p>
-          <ul className="flex flex-col gap-3" role="list">
+          <ul className="flex flex-col gap-3">
             {pageItems.map((flight) => (
               <li key={flight.id}>
                 <FlightCard
