@@ -93,7 +93,7 @@ describe('RegisterPage', () => {
 
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith('new@example.com', 'securepassword', true);
-      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true, state: { registered: true } });
     });
   });
 

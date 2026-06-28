@@ -25,7 +25,8 @@ describe('FlightCard', () => {
   it('renders flight number and route', () => {
     render(<FlightCard flight={baseFlight} onSelect={vi.fn()} />);
     expect(screen.getByText('SK451')).toBeInTheDocument();
-    expect(screen.getByText('London → Stockholm')).toBeInTheDocument();
+    // city names are rendered in separate elements; assert via the article's aria-label
+    expect(screen.getByRole('article', { name: /flight SK451 from London to Stockholm/i })).toBeInTheDocument();
   });
 
   it('renders formatted prices in GBP', () => {
